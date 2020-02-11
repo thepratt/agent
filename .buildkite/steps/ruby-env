@@ -1,0 +1,16 @@
+#!/bin/bash
+set -xeuo pipefail
+
+docker volume create agent-ruby26-gem-cache
+
+echo "+++ :docker::ruby: execute deploy"
+docker run \
+  -e FULL_AGENT_VERSION \
+  -e AGENT_VERSION \
+  -e BUILD_VERSION \
+  -v agent-ruby26-gem-cache:/usr/local/bundle \
+	-v $PWD:/app \
+	-w /app \
+  --rm \
+	ruby:2.6 "${@-bash}"
+
